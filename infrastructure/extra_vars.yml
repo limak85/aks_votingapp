@@ -20,5 +20,5 @@ aks_pod_cidr: 192.168.0.0/16
 aks_docker_bridge_cidr: 172.17.0.1/16
 aks_dns_service_ip: 10.2.0.10
 aks_service_cidr: 10.2.0.0/24
-aks_sp_client_id: "f246af77-f953-426e-b5d3-d623dfe53736"
-aks_sp_client_secret: "XDexUMpSlWu0q34KvFJR~Hf~ikB5OfDw_V"
+aks_sp_client_id: "{{ lookup('file', 'az_sp.json')|from_json|json_query('appId')}}"
+aks_sp_client_secret: "{{ lookup('file', 'az_sp.json')|from_json| json_query('password') }}"

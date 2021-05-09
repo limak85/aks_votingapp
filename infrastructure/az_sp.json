@@ -1,0 +1,1 @@
+### replace content with output from "az ad sp create-for-rbac --name AKSServicePrincipalName"
