@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: votingapp
+  name: redisdb
+  labels:
+    app: redis
+    component: db
+    tier: backend
+    part-of: voting-app   
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redisdb
+  template:
+    metadata:
+      labels:
+        app: redisdb
+    spec:
+      containers:
+      - name: redisdb
+        image: mcr.microsoft.com/oss/bitnami/redis:6.0.8
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
+        ports:
+        - containerPort: 6379
+          name: redis
+        resources:
+          requests:
+            cpu: 250m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 128Mi            

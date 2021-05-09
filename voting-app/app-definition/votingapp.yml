@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: votingapp
+  name: votingapp
+  labels:
+    app: votingapp
+    component: webapp
+    tier: frontend
+    part-of: voting-app  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: votingapp
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: votingapp
+    spec:
+      containers:
+      - name: votingapp
+        image: mcr.microsoft.com/azuredocs/azure-vote-front:v1
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+            memory: 64Mi            
+          limits:
+            cpu: 500m
+            memory: 128Mi            
+        env:
+        - name: REDIS
+          value: "redisdb"
