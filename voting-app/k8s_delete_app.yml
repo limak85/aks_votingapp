@@ -1,0 +1,19 @@
+- name: Delete Voting App
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Remove deployments
+      community.kubernetes.k8s:
+        state: absent
+        src: "{{ item }}"
+      loop:
+        - 'app-definition/redis.yml'
+        - 'app-definition/votingapp.yml'
+    - name: Remove services
+      community.kubernetes.k8s:
+        state: absent
+        src: 'app-definition/votingapp.yml'
+    - name: Remove namespace
+      community.kubernetes.k8s:
+        state: absent
+        src: 'app-definition/namespace.yml'
