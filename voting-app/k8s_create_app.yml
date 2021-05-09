@@ -2,18 +2,18 @@
   hosts: localhost
   connection: local
   tasks:
-    - name: Remove deployments
+    - name: Create namespace
+      community.kubernetes.k8s:
+        state: present
+        src: 'app-definition/namespace.yml'
+    - name: Create services
+      community.kubernetes.k8s:
+        state: present
+        src: 'app-definition/services.yml'
+    - name: Create deployments
       community.kubernetes.k8s:
         state: present
         src: "{{ item }}"
       loop:
         - 'app-definition/redis.yml'
         - 'app-definition/votingapp.yml'
-    - name: Remove services
-      community.kubernetes.k8s:
-        state: present
-        src: 'app-definition/votingapp.yml'
-    - name: Remove namespace
-      community.kubernetes.k8s:
-        state: present
-        src: 'app-definition/namespace.yml'
