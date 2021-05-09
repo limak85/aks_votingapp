@@ -1,0 +1,24 @@
+az_resource_group_name: rg_aksiac
+az_location: uksouth
+az_vnet_name: vnnet_aksiac
+az_vnet_cidrs:
+  - 10.0.0.0/8
+az_subnet_name: subnet_aksiac
+az_subnet_cidr: 10.240.0.0/16
+aks_name: aksiac
+aks_vm_username: adminuser
+aks_vm_ssh_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+aks_version: 1.20.5
+aks_agent_pool_name: akspool1
+aks_vm_size: Standard_D2_v3
+aks_vm_count: 2
+aks_tags: {
+  Environment: "iac"
+}
+aks_network_plugin: kubenet
+aks_pod_cidr: 192.168.0.0/16
+aks_docker_bridge_cidr: 172.17.0.1/16
+aks_dns_service_ip: 10.2.0.10
+aks_service_cidr: 10.2.0.0/24
+aks_sp_client_id: "f246af77-f953-426e-b5d3-d623dfe53736"
+aks_sp_client_secret: "XDexUMpSlWu0q34KvFJR~Hf~ikB5OfDw_V"

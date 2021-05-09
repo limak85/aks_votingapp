@@ -1,0 +1,11 @@
+- name: Delete Azure Container Services (AKS) cluster
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Include external variables
+    include_vars: extra_vars.yml
+  - name: Delete Azure resource group - "{{ aks_name }}"
+    azure_rm_aks:
+      name: "{{ aks_name }}"
+      resource_group: "{{ az_resource_group_name }}"
+      state: absent

@@ -1,0 +1,47 @@
+- name: Create Azure Kubernetes Service
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Include external variables
+    include_vars: extra_vars.yml
+  - name: Create Azure resource group - "{{ az_resource_group_name }}"
+    azure_rm_resourcegroup:
+      name: "{{ az_resource_group_name }}"
+      location: "{{ az_location }}"
+  - name: Create Azure vnet
+    azure_rm_virtualnetwork:
+      resource_group: "{{ az_resource_group_name }}"
+      name: "{{ az_vnet_name }}"
+      address_prefixes_cidr: "{{ az_vnet_cidrs }}"
+  - name: Create Azure subnet
+    azure_rm_subnet:
+      resource_group: "{{ az_resource_group_name }}"
+      name: "{{ az_subnet_name }}"
+      address_prefix_cidr: "{{ az_subnet_cidr }}"
+      virtual_network_name: "{{ az_vnet_name }}"
+    register: subnet
+  - name: Create Azure Container Services (AKS) cluster
+    azure_rm_aks:
+      name: "{{ aks_name }}"
+      location: "{{ az_location }}"
+      resource_group: "{{ az_resource_group_name }}"
+      dns_prefix: "{{ aks_name }}"
+      kubernetes_version: "{{ aks_version }}"
+      linux_profile:
+        admin_username: "{{ aks_vm_username }}"
+        ssh_key: "{{ aks_vm_ssh_key }}"
+      agent_pool_profiles:
+        - name: "{{ aks_agent_pool_name }}"
+          count: "{{ aks_vm_count }}"
+          vm_size: "{{ aks_vm_size }}"
+          vnet_subnet_id: "{{ subnet.state.id }}"
+      network_profile:
+        network_plugin: "{{ aks_network_plugin }}"
+        pod_cidr: "{{ aks_pod_cidr }}"
+        docker_bridge_cidr: "{{ aks_docker_bridge_cidr }}"
+        dns_service_ip: "{{ aks_dns_service_ip }}"
+        service_cidr: "{{ aks_service_cidr }}"
+      service_principal:
+        client_id: "{{ aks_sp_client_id }}"
+        client_secret: "{{ aks_sp_client_secret }}"
+      tags: "{{ aks_tags }}"
